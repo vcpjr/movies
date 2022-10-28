@@ -11,28 +11,28 @@ import java.util.List;
 @Configuration
 public class MovieConfig {
 
-    @Bean
-    CommandLineRunner commandLineRunner(MovieRepository repository){
-        return args -> {
-            Movie blackAdam = new Movie(
-                    1,
-                    2022,
-                    "Black Adam",
-                    "WB",
-                    "Dwayne Johnson",
-                    true
-            );
-
-            Movie shazam = new Movie(
-                    1,
-                    2020,
-                    "Shazam",
-                    "WB",
-                    "Zachary Levi",
-                    false
-            );
-
-            repository.saveAll(List.of(blackAdam, shazam));
-        };
-    }
+//    @Bean
+//    CommandLineRunner commandLineRunner(MovieRepository repository){
+//        return args -> {
+//            Movie blackAdam = new Movie(
+//                    1,
+//                    2022,
+//                    "Black Adam",
+//                    "WB",
+//                    "Dwayne Johnson",
+//                    true
+//            );
+//
+//            Movie shazam = new Movie(
+//                    1,
+//                    2020,
+//                    "Shazam",
+//                    "WB",
+//                    "Zachary Levi",
+//                    false
+//            );
+//
+//            repository.saveAll(List.of(blackAdam, shazam));
+//        };
+//    }
 }

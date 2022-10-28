@@ -6,11 +6,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
-    @Query("SELECT m FROM Movie m WHERE m.producer = ?1")
-    Optional<Movie> findMovieByProducer(String producer);
+    @Query("SELECT m FROM Movie m, Producer p WHERE p.name in (?1)")
+    Optional<Movie> findMovieByProducer(Object[] names);
+
+    //@Query("SELECT m FROM Movie m WHERE m.winner = true")
+    Optional<Movie> findMoviesByWinnerEquals(Boolean winner);
+
+    //TODO
+    //Para query usar JDBCRepository
 }
