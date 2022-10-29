@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="movie")
@@ -30,9 +31,13 @@ public class Movie implements Serializable {
     @Column
     private String studio;
 
-    //TODO resolver problema ao salvar
+    //https://thorben-janssen.com/best-practices-for-many-to-many-associations-with-hibernate-and-jpa/
+    //Usar SET e não LIST
+    @JoinTable(name = "movie_producer",
+            joinColumns = { @JoinColumn(name = "id_movie"), },
+            inverseJoinColumns = { @JoinColumn(name = "id_producer") })
     @ManyToMany
-    private List<Producer> producers;
+    private Set<Producer> producers;
 
     @Column
     private Boolean winner;

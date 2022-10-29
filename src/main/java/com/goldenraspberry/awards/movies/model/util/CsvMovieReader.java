@@ -34,12 +34,12 @@ public class CsvMovieReader {
 
 				if(!linha.trim().isEmpty()){
 					Movie movie = Movie.fromCSV(linha);
-					List<Producer> producers = movie.getProducers();
-					for (Producer producer: producers) {
-						if(producerRepository.findByName(producer.getName()) == null){
-							producerRepository.save(producer);
-						}
-					}
+//					List<Producer> producers = movie.getProducers();
+//					for (Producer producer: producers) {
+//						if(producerRepository.findByName(producer.getName()) == null){
+//							producerRepository.save(producer);
+//						}
+//					}
 
 
 					this.movieRepository.save(movie);

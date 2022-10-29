@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface ProducerRepository extends JpaRepository<Producer, Integer> {
 
-    public Producer findByName(String name);
+    public  Optional<Producer> findByName(String name);
 }

@@ -1,17 +1,16 @@
 package com.goldenraspberry.awards.movies.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="producer")
@@ -27,17 +26,16 @@ public class Producer implements Serializable {
     @Column
     private String name;
 
-    @ManyToMany(cascade=CascadeType.PERSIST)
-    private List<Movie> movies;
-
-    public static List<Producer> fromCSV(String[] producersNames) {
-        List<Producer> producers = new ArrayList<>();
+    public static Set<Producer> fromCSV(String[] producersNames) {
+        Set<Producer> producers = new HashSet<>();
         if(producersNames != null && producersNames.length > 0){
             for (int i = 0; i < producersNames.length; i++){
-                Producer p = new Producer();
-                p.setName(producersNames[i].trim());
+                if(!producersNames[i].trim().isEmpty()){
+                    Producer p = new Producer();
+                    p.setName(producersNames[i].trim());
 
-                producers.add(p);
+                    producers.add(p);
+                }
             }
         }
 

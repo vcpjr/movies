@@ -30,15 +30,13 @@ public class MovieService{
     }
 
     public void insert(Movie movie) {
-
-
-
-        Optional<Movie> movieByProducer = movieRepository.findMovieByProducer(movie.getProducers().toArray());
-
-        //Teste de validação
-        if(movieByProducer.isPresent()){
-            throw new IllegalStateException("Produtor já utilizado");
-        }
+        //TODO incluir validação
+//        Optional<Movie> movieByProducer = movieRepository.findMovieByProducer(movie.getProducers().toArray());
+//
+//        //Teste de validação
+//        if(movieByProducer.isPresent()){
+//            throw new IllegalStateException("Produtor já utilizado");
+//        }
 
         this.movieRepository.save(movie);
     }
