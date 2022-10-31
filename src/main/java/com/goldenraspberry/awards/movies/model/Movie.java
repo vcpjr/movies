@@ -36,7 +36,7 @@ public class Movie implements Serializable {
     @JoinTable(name = "movie_producer",
             joinColumns = { @JoinColumn(name = "id_movie"), },
             inverseJoinColumns = { @JoinColumn(name = "id_producer") })
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Producer> producers;
 
     @Column

@@ -34,13 +34,16 @@ public class CsvMovieReader {
 
 				if(!linha.trim().isEmpty()){
 					Movie movie = Movie.fromCSV(linha);
+
+					//TODO verificar antes se o produtor já existe?
+
+					//Isso era usado antes do salvamento em cascata
 //					List<Producer> producers = movie.getProducers();
 //					for (Producer producer: producers) {
 //						if(producerRepository.findByName(producer.getName()) == null){
 //							producerRepository.save(producer);
 //						}
 //					}
-
 
 					this.movieRepository.save(movie);
 				}
