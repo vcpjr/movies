@@ -1,8 +1,6 @@
 package com.goldenraspberry.awards.movies.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.apache.poi.ss.usermodel.Cell;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,8 +29,6 @@ public class Movie implements Serializable {
     @Column
     private String studio;
 
-    //https://thorben-janssen.com/best-practices-for-many-to-many-associations-with-hibernate-and-jpa/
-    //Usar SET e não LIST
     @JoinTable(name = "movie_producer",
             joinColumns = { @JoinColumn(name = "id_movie"), },
             inverseJoinColumns = { @JoinColumn(name = "id_producer") })

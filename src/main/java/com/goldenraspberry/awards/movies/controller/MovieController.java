@@ -21,12 +21,6 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    //TODO funcionando com XLS
-    @PostMapping(path = "/upload")
-    public void uploadCSV(@RequestParam("file") MultipartFile file) throws IOException {
-       this.movieService.upload(file);
-    }
-
     @GetMapping(path = "minMaxWinners")
     public PrizeDTO getMinAndMaxPrizeProducers(){
         return movieService.getMinAndMaxPrizeProducers();
@@ -38,8 +32,8 @@ public class MovieController {
     }
 
     @PostMapping
-    public void insert(@RequestBody Movie movie){
-        movieService.insert(movie);
+    public Movie insert(@RequestBody Movie movie){
+        return movieService.insert(movie);
     }
 
     @PutMapping
@@ -47,8 +41,13 @@ public class MovieController {
         movieService.update(movie);
     }
 
-    @DeleteMapping(path = "{movieId}")
+    @DeleteMapping(path = "/{movieId}")
     public void delete(@PathVariable("movieId") Integer id){
         movieService.delete(id);
+    }
+
+    @GetMapping(path = "/{movieId}")
+    public Movie findMovieByID(@PathVariable("movieId") Integer id){
+        return movieService.findMovieById(id);
     }
 }

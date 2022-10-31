@@ -1,29 +1,21 @@
 package com.goldenraspberry.awards.movies.model.util;
 
+import com.goldenraspberry.awards.movies.component.StartupComponent;
 import com.goldenraspberry.awards.movies.model.Movie;
-import com.goldenraspberry.awards.movies.model.Producer;
-import com.goldenraspberry.awards.movies.repository.MovieRepository;
-import com.goldenraspberry.awards.movies.repository.ProducerRepository;
-import org.springframework.stereotype.Service;
+import org.jboss.logging.Logger;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.swing.text.html.parser.Entity;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 public class CsvMovieReader {
 
-	private final String YES = "yes";
-	private final MovieRepository movieRepository;
-	private final ProducerRepository producerRepository;
+	private static final Logger LOGGER = Logger.getLogger(CsvMovieReader.class);
 
-	public CsvMovieReader(MovieRepository movieRepository, ProducerRepository producerRepository) {
-		this.movieRepository = movieRepository;
-		this.producerRepository = producerRepository;
-	}
-
-	public void importar(InputStream fis) {
+	public List<Movie> readCsv(InputStream fis) {
+		List<Movie> movies = new ArrayList<>();
 		try (InputStreamReader isr = new InputStreamReader(fis);
 			  BufferedReader br = new BufferedReader(isr)){
 			//Pula a primeira linha
@@ -34,18 +26,7 @@ public class CsvMovieReader {
 
 				if(!linha.trim().isEmpty()){
 					Movie movie = Movie.fromCSV(linha);
-
-					//TODO verificar antes se o produtor já existe?
-
-					//Isso era usado antes do salvamento em cascata
-//					List<Producer> producers = movie.getProducers();
-//					for (Producer producer: producers) {
-//						if(producerRepository.findByName(producer.getName()) == null){
-//							producerRepository.save(producer);
-//						}
-//					}
-
-					this.movieRepository.save(movie);
+					movies.add(movie);
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -53,5 +34,8 @@ public class CsvMovieReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		LOGGER.infof("Readed %d movies from CSV", movies.size());
+		return movies;
 	}
 }
