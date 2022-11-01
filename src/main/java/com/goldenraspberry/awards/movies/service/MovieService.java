@@ -1,6 +1,7 @@
 package com.goldenraspberry.awards.movies.service;
 
 import com.goldenraspberry.awards.movies.model.Movie;
+import com.goldenraspberry.awards.movies.model.Producer;
 import com.goldenraspberry.awards.movies.model.dto.PrizeDTO;
 import com.goldenraspberry.awards.movies.model.dto.WinnerDTO;
 import com.goldenraspberry.awards.movies.model.util.CsvMovieReader;
@@ -8,7 +9,6 @@ import com.goldenraspberry.awards.movies.repository.MovieRepository;
 import com.goldenraspberry.awards.movies.repository.ProducerRepository;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -38,14 +38,6 @@ public class MovieService{
     }
 
     public Movie insert(Movie movie) {
-        //TODO incluir validação
-//        Optional<Movie> movieByProducer = movieRepository.findMovieByProducer(movie.getProducers().toArray());
-//
-//        //Teste de validação
-//        if(movieByProducer.isPresent()){
-//            throw new IllegalStateException("Produtor já utilizado");
-//        }
-
         return this.movieRepository.save(movie);
     }
 
@@ -64,7 +56,23 @@ public class MovieService{
 
     public void importCsv(InputStream is){
         List<Movie> movies = this.csvMovieReader.readCsv(is);
-        this.movieRepository.saveAll(movies);
+
+        //TODO ver com Hallan se tem forma mais otimizada de evitar os registros de produtor duplicados
+        for (Movie movie: movies) {
+            List<Producer> producers = movie.getProducers();
+            for(int i = 0; i < producers.size(); i++) {
+                Optional<Producer> savedProducer = producerRepository.findByName(producers.get(i).getName());
+
+                if(savedProducer.isPresent()){
+                    producers.set(i, savedProducer.get());
+                }else{
+                    this.producerRepository.save(producers.get(i));
+                }
+            }
+            this.movieRepository.save(movie);
+        }
+
+        //this.movieRepository.saveAll(movies);
         LOGGER.infof("%d movies saved on database", movies.size());
     }
 
@@ -72,10 +80,10 @@ public class MovieService{
 
         PrizeDTO prizeDTO = new PrizeDTO();
 
-        List<WinnerDTO> maxWinners = this.movieRepository.getMaxWinners( Pageable.ofSize(2) );
+        List<WinnerDTO> maxWinners = WinnerDTO.fromTuple(this.movieRepository.getMaxWinners());
         prizeDTO.setMax(maxWinners);
 
-        List<WinnerDTO> minWinners = this.movieRepository.getMinWinners( Pageable.ofSize(2) );
+        List<WinnerDTO> minWinners = WinnerDTO.fromTuple(this.movieRepository.getMinWinners());
         prizeDTO.setMin(minWinners);
 
         return prizeDTO;

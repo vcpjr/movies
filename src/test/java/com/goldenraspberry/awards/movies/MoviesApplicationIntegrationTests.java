@@ -2,6 +2,7 @@ package com.goldenraspberry.awards.movies;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goldenraspberry.awards.movies.model.Movie;
+import com.goldenraspberry.awards.movies.model.dto.PrizeDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,7 +44,7 @@ class MoviesApplicationIntegrationTests {
 		Movie movie = new Movie();
 		movie.setTitle("Junit Movie");
 		movie.setReleaseYear(2018);
-		movie.setProducers(new HashSet<>());
+		movie.setProducers(new ArrayList<>());
 
 		MvcResult resultInsert =
 			mockMvc.perform(post(URI)
@@ -60,6 +62,19 @@ class MoviesApplicationIntegrationTests {
 		Movie insertedMovie = this.objectMapper.readValue(resultFind.getResponse().getContentAsString(), Movie.class);
 
 		Assertions.assertThat(returnedMovie).usingRecursiveComparison().isEqualTo(insertedMovie);
+	}
+
+	@Test
+	public void test_min_max_winners() throws Exception {
+		MvcResult resultFind =
+				mockMvc.perform(get(URI + "/" + "minMaxWinners")
+								.contentType(MediaType.APPLICATION_JSON) )
+						.andExpect(status().isOk())
+						.andReturn();
+		PrizeDTO dto = this.objectMapper.readValue(resultFind.getResponse().getContentAsString(), PrizeDTO.class);
+
+		System.out.println(dto);
+		//TODO Assertions
 	}
 
 

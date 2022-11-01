@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,8 +26,8 @@ public class Producer implements Serializable {
     @Column
     private String name;
 
-    public static Set<Producer> fromCSV(String[] producersNames) {
-        Set<Producer> producers = new HashSet<>();
+    public static List<Producer> fromCSV(String[] producersNames) {
+        List<Producer> producers = new ArrayList<>();
         if(producersNames != null && producersNames.length > 0){
             for (int i = 0; i < producersNames.length; i++){
                 if(!producersNames[i].trim().isEmpty()){

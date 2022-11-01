@@ -1,10 +1,13 @@
 package com.goldenraspberry.awards.movies.model;
 
+import com.goldenraspberry.awards.movies.model.dto.WinnerDTO;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.servlet.annotation.WebInitParam;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,8 +35,8 @@ public class Movie implements Serializable {
     @JoinTable(name = "movie_producer",
             joinColumns = { @JoinColumn(name = "id_movie"), },
             inverseJoinColumns = { @JoinColumn(name = "id_producer") })
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private Set<Producer> producers;
+    @ManyToMany //(cascade = CascadeType.PERSIST)
+    private List<Producer> producers;
 
     @Column
     private Boolean winner;
